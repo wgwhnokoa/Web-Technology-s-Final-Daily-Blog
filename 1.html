@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Xiao's Blog - 移动版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+            --text: #34495e;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 70px; /* 为底部导航留出空间 */
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--secondary);
+            transition: var(--transition);
+        }
+        
+        a:hover {
+            color: var(--accent);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        /* 顶部导航 */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 0;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: var(--gray);
+            transition: var(--transition);
+            padding: 5px 10px;
+        }
+        
+        .nav-item.active {
+            color: var(--secondary);
+        }
+        
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        /* 页面内容 */
+        .page {
+            display: none;
+            padding: 20px 0;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            background: var(--primary);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .hero h1 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        
+        /* 文章卡片 */
+        .post {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .post-img-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+        }
+        
+        .post-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .post-content {
+            padding: 20px;
+        }
+        
+        .post-meta {
+            display: flex;
+            margin-bottom: 10px;
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+        
+        .post-meta span {
+            margin-right: 15px;
+        }
+        
+        .post-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .post-excerpt {
+            margin-bottom: 15px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        /* 关于页面 */
+        .about-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .about-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .about-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+        
+        .about-info h2 {
+            margin-bottom: 5px;
+        }
+        
+        .about-info p {
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .skill-tag {
+            background: var(--light);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .contact-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .contact-list li {
+            margin-bottom: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--light);
+        }
+        
+        /* 管理页面 */
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .admin-actions .btn {
+            width: auto;
+            flex: 1;
+        }
+        
+        .article-list {
+            list-style: none;
+        }
+        
+        .article-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--light);
+            transition: var(--transition);
+        }
+        
+        .article-item:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+        
+        .article-info h3 {
+            margin-bottom: 5px;
+        }
+        
+        .article-meta {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .article-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .edit-btn {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .delete-btn {
+            background: var(--accent);
+            color: white;
+        }
+        
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light);
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .close-modal:hover {
+            color: var(--accent);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            
+            .post-title {
+                font-size: 1.2rem;
+            }
+            
+            .about-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .about-avatar {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+        
+        /* 加载动画 */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--light);
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Xiao's <span>Blog</span></div>
+        </div>
+    </header>
+
+    <!-- 首页 -->
+    <div class="container page active" id="home">
+        <!-- 英雄区域 -->
+        <section class="hero">
+            <h1>Dreams are the Seedings of Realities.</h1>
+            <button class="btn" id="import-txt-btn">上传博客</button>
+        </section>
+
+        <!-- 文章列表 -->
+        <div class="posts" id="posts-container">
+            <!-- 文章将通过JS动态添加 -->
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 关于页面 -->
+    <div class="container page" id="about">
+        <div class="about-content">
+            <div class="about-header">
+                <img src="https://s2.loli.net/2025/10/21/GrMgxDbocHUlIsh.png" alt="作者" class="about-avatar">
+                <div class="about-info">
+                    <h2>Ziyan Xiao</h2>
+                    <p>大学生 & 动漫爱好者</p>
+                    <p>希望通过自己的评论为您带来不同的视角</p>
+                </div>
+            </div>
+            
+            <h3>技能</h3>
+            <div class="skills">
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">React</span>
+                <span class="skill-tag">Node.js</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">写作</span>
+            </div>
+            
+            <h3>联系我</h3>
+            <ul class="contact-list">
+                <li><i class="fas fa-envelope"></i> 邮箱: 385705141@qq.com</li>
+                <li><i class="fab fa-github"></i> GitHub: github.com/wgwhnokoa</li>
+                <li><i class="fab fa-qq"></i> QQ: 385705141</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 文章管理页面 -->
+    <div class="container page" id="manage">
+        <div class="about-content">
+            <h2 class="modal-title">文章管理</h2>
+            
+            <div class="admin-actions">
+                <button class="btn" id="add-article-btn">添加文章</button>
+                <button class="btn btn-outline" id="import-article-btn">导入文章</button>
+            </div>
+            
+            <h3>文章列表</h3>
+            <ul class="article-list" id="article-list">
+                <!-- 文章列表将通过JS动态添加 -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <div class="bottom-nav">
+        <div class="nav-item active" data-page="home">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </div>
+        <div class="nav-item" data-page="about">
+            <i class="fas fa-user"></i>
+            <span>关于</span>
+        </div>
+        <div class="nav-item" data-page="manage">
+            <i class="fas fa-edit"></i>
+            <span>管理</span>
+        </div>
+    </div>
+
+    <!-- 新建文章模态框 -->
+    <div class="modal" id="article-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">创建新文章</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="article-form">
+                <div class="form-group">
+                    <label for="article-title">文章标题</label>
+                    <input type="text" id="article-title" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="article-category">分类</label>
+                    <select id="article-category" class="form-control">
+                        <option value="学习">学习</option>
+                        <option value="作品欣赏">作品欣赏</option>
+                        <option value="旅行">旅行</option>
+                        <option value="技术">技术</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="article-content">文章内容</label>
+                    <textarea id="article-content" class="form-control" required></textarea>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
+                    <button type="button" class="btn btn-outline" id="cancel-article">取消</button>
+                    <button type="submit" class="btn">保存文章</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 从localStorage加载文章数据，如果没有则使用示例数据
+        let articles = JSON.parse(localStorage.getItem('blogArticles')) || [
+            {
+                id: 1,
+                title: "欢迎来到我的博客",
+                excerpt: "这是我的第一篇博客文章，欢迎阅读！",
+                content: "这是我的第一篇博客文章，欢迎阅读！我会在这里分享我的想法、学习和生活经历。",
+                category: "学习",
+                date: new Date().toLocaleDateString('zh-CN'),
+                image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+            }
+        ];
+
+        // 保存文章到localStorage
+        function saveArticles() {
+            localStorage.setItem('blogArticles', JSON.stringify(articles));
+        }
+
+        // 页面切换功能
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // 更新导航激活状态
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // 显示对应页面
+                const pageId = this.getAttribute('data-page');
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(pageId).classList.add('active');
+            });
+        });
+
+        // 渲染文章列表
+        function renderArticles() {
+            const postsContainer = document.getElementById('posts-container');
+            const articleList = document.getElementById('article-list');
+            
+            // 清空容器
+            postsContainer.innerHTML = '';
+            articleList.innerHTML = '';
+            
+            // 如果没有文章，显示空状态
+            if (articles.length === 0) {
+                postsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>暂无文章</h3>
+                        <p>点击下方"添加文章"按钮创建您的第一篇文章</p>
+                    </div>
+                `;
+                articleList.innerHTML = '<li class="empty-state">暂无文章</li>';
+                return;
+            }
+            
+            // 渲染首页文章
+            articles.forEach(article => {
+                const postElement = document.createElement('article');
+                postElement.className = 'post';
+                postElement.innerHTML = `
+                    <div class="post-img-container">
+                        <img src="${article.image}" alt="${article.title}" class="post-img">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span>${article.date}</span>
+                            <span>${article.category}</span>
+                        </div>
+                        <h2 class="post-title">${article.title}</h2>
+                        <p class="post-excerpt">${article.excerpt}</p>
+                        <button class="btn read-more" data-id="${article.id}">阅读更多</button>
+                    </div>
+                `;
+                postsContainer.appendChild(postElement);
+                
+                // 渲染管理页面文章列表
+                const listItem = document.createElement('li');
+                listItem.className = 'article-item';
+                listItem.innerHTML = `
+                    <div class="article-info">
+                        <h3>${article.title}</h3>
+                        <div class="article-meta">${article.date} · ${article.category}</div>
+                    </div>
+                    <div class="article-actions">
+                        <button class="action-btn edit-btn" data-id="${article.id}">编辑</button>
+                        <button class="action-btn delete-btn" data-id="${article.id}">删除</button>
+                    </div>
+                `;
+                articleList.appendChild(listItem);
+            });
+            
+            // 为阅读更多按钮添加事件
+            setupReadMoreEvents();
+            
+            // 为编辑和删除按钮添加事件
+            setupArticleActions();
+        }
+
+        // 设置阅读更多事件
+        function setupReadMoreEvents() {
+            document.querySelectorAll('.read-more').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const articleId = parseInt(this.getAttribute('data-id'));
+                    const article = articles.find(article => article.id === articleId);
+                    if (article) {
+                        showArticleDetail(article);
+                    }
+                });
+            });
+        }
+
+        // 设置文章操作事件
+        function setupArticleActions() {
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const articleId = parseInt(this.getAttribute('data-id'));
+                    const article = articles.find(article => article.id === articleId);
+                    if (article) {
+                        editArticle(article);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const articleId = parseInt(this.getAttribute('data-id'));
+                    if (confirm('确定要删除这篇文章吗？')) {
+                        deleteArticle(articleId);
+                    }
+                });
+            });
+        }
+
+        // 显示文章详情
+        function showArticleDetail(article) {
+            alert(`文章标题: ${article.title}\n\n文章内容: ${article.content}`);
+        }
+
+        // 编辑文章
+        function editArticle(article) {
+            // 填充表单
+            document.getElementById('article-title').value = article.title;
+            document.getElementById('article-category').value = article.category;
+            document.getElementById('article-content').value = article.content;
+            
+            // 显示模态框
+            document.getElementById('article-modal').classList.add('active');
+            
+            // 设置表单提交事件（更新文章）
+            document.getElementById('article-form').onsubmit = function(e) {
+                e.preventDefault();
+                
+                // 更新文章
+                article.title = document.getElementById('article-title').value;
+                article.category = document.getElementById('article-category').value;
+                article.content = document.getElementById('article-content').value;
+                article.excerpt = article.content.substring(0, 50) + '...';
+                
+                // 保存到localStorage
+                saveArticles();
+                
+                // 重新渲染
+                renderArticles();
+                
+                alert('文章已更新！');
+                document.getElementById('article-modal').classList.remove('active');
+            };
+        }
+
+        // 删除文章
+        function deleteArticle(articleId) {
+            // 找到文章在数组中的索引
+            const articleIndex = articles.findIndex(article => article.id === articleId);
+            if (articleIndex !== -1) {
+                // 从数组中删除文章
+                articles.splice(articleIndex, 1);
+                // 保存到localStorage
+                saveArticles();
+                // 重新渲染文章列表
+                renderArticles();
+                alert('文章已删除！');
+            }
+        }
+
+        // 初始化渲染
+        setTimeout(() => {
+            renderArticles();
+        }, 1000); // 模拟加载延迟
+
+        // 模态框功能
+        const modal = document.getElementById('article-modal');
+        const openModalBtn = document.getElementById('add-article-btn');
+        const closeModalBtn = document.querySelector('.close-modal');
+        const cancelBtn = document.getElementById('cancel-article');
+        const articleForm = document.getElementById('article-form');
+        
+        openModalBtn.addEventListener('click', () => {
+            modal.classList.add('active');
+            // 重置表单
+            articleForm.reset();
+            // 设置表单提交事件（新建文章）
+            articleForm.onsubmit = function(e) {
+                e.preventDefault();
+                
+                // 创建新文章
+                const newArticle = {
+                    id: articles.length > 0 ? Math.max(...articles.map(a => a.id)) + 1 : 1,
+                    title: document.getElementById('article-title').value,
+                    excerpt: document.getElementById('article-content').value.substring(0, 50) + '...',
+                    content: document.getElementById('article-content').value,
+                    category: document.getElementById('article-category').value,
+                    date: new Date().toLocaleDateString('zh-CN'),
+                    image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                };
+                
+                // 添加到文章列表
+                articles.unshift(newArticle);
+                
+                // 保存到localStorage
+                saveArticles();
+                
+                // 重新渲染
+                renderArticles();
+                
+                alert('文章已保存！');
+                modal.classList.remove('active');
+            };
+        });
+        
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+        
+        cancelBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+        
+        // 点击模态框外部关闭
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+        
+        // 导入文章功能
+        document.getElementById('import-article-btn').addEventListener('click', function() {
+            // 这里可以添加导入文章的逻辑
+            alert('导入文章功能将在完整版中实现');
+        });
+        
+        // 首页导入按钮
+        document.getElementById('import-txt-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // 切换到管理页面
+            document.querySelector('.nav-item[data-page="manage"]').click();
+            // 触发导入按钮
+            document.getElementById('import-article-btn').click();
+        });
+    </script>
+</body>
+</html>
